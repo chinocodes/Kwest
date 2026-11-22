@@ -11,5 +11,5 @@ key = os.getenv("SUPABASE_KEY")
 supabase = create_client(url, key)
 
 
-results = supabase.table('tasks').select('*').execute()
-print(results)
+# results = supabase.table('tasks').select('*').execute()
+# print(results)
