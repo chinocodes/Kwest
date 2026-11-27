@@ -38,14 +38,40 @@ function MyButton({ title, disabled, onClick }: MyButtonProps) {
 
 export default function MyApp() {
   const [task, setTask] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const createTask = () => {
+
+  const createTask = async () => {
     if (!task.trim()) {
       console.log("Please enter a task");
+      return;
     }
-    else {
-      console.log(task)
+    setLoading(true);
+    
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/tasks/create', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json; charset=utf-8'},
+        body: JSON.stringify({name:task,}),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          console.log("Task added");
+        }
+        else {
+          console.log(data.detail)
+        }
+
+    } catch (err) {
+      console.error(err);
+      console.log("error, unable to connect to server");
+
     }
+    finally {
+      setLoading(false);
+    }
+
   }
   return (
     <main className="app-container">
