@@ -1,28 +1,35 @@
 import { Bell, Clock, Gamepad2, Plus, Zap } from "lucide-react";
 import "./App.css";
+import { useState } from "react";
+
 
 interface MyButtonProps {
   title: string;
   disabled: boolean;
+  onClick: () => void
 }
 
 interface EnterTaskProps {
   placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
 }
 
-function EnterTask({ placeholder }: EnterTaskProps) {
+function EnterTask({ placeholder, value, onChange }: EnterTaskProps) {
   return (
     <input
       type="text"
       placeholder={placeholder}
       className="task-input"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
     />
   );
 }
 
-function MyButton({ title, disabled }: MyButtonProps) {
+function MyButton({ title, disabled, onClick }: MyButtonProps) {
   return (
-    <button className="start-button" disabled={disabled}>
+    <button className="start-button" disabled={disabled} onClick={onClick}>
       <Plus size={18} strokeWidth={3} />
       {title}
     </button>
@@ -30,6 +37,16 @@ function MyButton({ title, disabled }: MyButtonProps) {
 }
 
 export default function MyApp() {
+  const [task, setTask] = useState("");
+
+  const createTask = () => {
+    if (!task.trim()) {
+      console.log("Please enter a task");
+    }
+    else {
+      console.log(task)
+    }
+  }
   return (
     <main className="app-container">
       <nav className="top-bar">
@@ -74,11 +91,11 @@ export default function MyApp() {
           </div>
         </div>
 
-        <EnterTask placeholder="Type your next quest here..." />
+        <EnterTask placeholder="Type your next quest here..." value={task} onChange={setTask} />
 
         <div className="input-bottom">
           <span>MAKE IT COUNT.</span>
-          <MyButton title="ADD QUEST" disabled={false} />
+          <MyButton title="ADD QUEST" disabled={false} onClick={createTask} />
         </div>
       </section>
 
